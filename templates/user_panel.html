@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>👤 Панель пользователя</h1>
+        <a href="/logout" class="btn btn-danger">Выйти</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>📋 Мои тикеты</h4>
+                </div>
+                <div class="card-body">
+                    {% if tickets %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Заголовок</th>
+                                    <th>Статус</th>
+                                    <th>Приоритет</th>
+                                    <th>Дата</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ticket in tickets %}
+                                <tr>
+                                    <td><strong>#{{ ticket.id }}</strong></td>
+                                    <td>{{ ticket.title }}</td>
+                                    <td>
+                                        <span class="badge
+                                            {% if ticket.status == 'open' %}bg-warning
+                                            {% elif ticket.status == 'in_progress' %}bg-info
+                                            {% elif ticket.status == 'resolved' %}bg-success
+                                            {% else %}bg-secondary{% endif %}">
+                                            {% if ticket.status == 'open' %}Открыт
+                                            {% elif ticket.status == 'in_progress' %}В работе
+                                            {% elif ticket.status == 'resolved' %}Решен
+                                            {% else %}Отменен{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge
+                                            {% if ticket.priority == 'low' %}bg-secondary
+                                            {% elif ticket.priority == 'medium' %}bg-primary
+                                            {% elif ticket.priority == 'high' %}bg-warning
+                                            {% else %}bg-danger{% endif %}">
+                                            {{ ticket.priority }}
+                                        </span>
+                                    </td>
+                                    <td>{{ ticket.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                                    <td>
+                                        <a href="/ticket/{{ ticket.id }}" class="btn btn-sm btn-primary">👀 Просмотр</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <h5>🎉 У вас пока нет тикетов!</h5>
+                        <p>Создайте первый тикет для решения вашей проблемы</p>
+                        <a href="/create_ticket" class="btn btn-success">Создать первый тикет</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5>💻 Мои компьютеры</h5>
+                </div>
+                <div class="card-body">
+                    {% if computers %}
+                    {% for computer in computers %}
+                    <div class="mb-3 p-3 border rounded bg-light">
+                        <h6>🖥️ {{ computer.pc_name }}</h6>
+                        <p class="mb-1">🌐 IP: {{ computer.ip_address }}</p>
+                        <p class="mb-1">🖥️ OS: {{ computer.operating_system }}</p>
+                        {% if computer.specifications %}
+                        <p class="mb-0">⚙️ {{ computer.specifications }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="text-center py-3">
+                        <h6>😕 Нет компьютеров</h6>
+                        <p>Добавьте компьютер для создания тикетов</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-success text-white">
+                    <h5>🚀 Быстрые действия</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/create_ticket" class="btn btn-primary">📝 Создать тикет</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

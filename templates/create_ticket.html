@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Создать новый тикет</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('create_ticket') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Выберите компьютер</label>
+                            <select class="form-select" name="computer_id" required>
+                                <option value="">-- Выберите компьютер --</option>
+                                {% for computer in computers %}
+                                <option value="{{ computer.id }}">{{ computer.pc_name }} ({{ computer.ip_address }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Заголовок проблемы</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Приоритет</label>
+                            <select class="form-select" name="priority">
+                                <option value="low">Низкий</option>
+                                <option value="medium" selected>Средний</option>
+                                <option value="high">Высокий</option>
+                                <option value="critical">Критический</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Описание проблемы</label>
+                            <textarea class="form-control" name="description" rows="5" required></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Создать тикет</button>
+                            <a href="{{ url_for('user_panel') }}" class="btn btn-secondary">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

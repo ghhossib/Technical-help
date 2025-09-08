@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Мои компьютеры</h1>
+    <a href="{{ url_for('add_computer') }}" class="btn btn-success">Добавить компьютер</a>
+</div>
+
+<div class="row">
+    {% for computer in computers %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ computer.pc_name }}</h5>
+                <p class="card-text">
+                    <strong>IP:</strong> {{ computer.ip_address }}<br>
+                    <strong>ОС:</strong> {{ computer.operating_system }}<br>
+                    {% if computer.specifications %}
+                    <strong>Характеристики:</strong> {{ computer.specifications }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            У вас нет добавленных компьютеров
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

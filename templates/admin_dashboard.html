@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Панель администратора</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Всего тикетов</h5>
+                <p class="card-text display-4">{{ stats.total }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Открыто</h5>
+                <p class="card-text display-4">{{ stats.open }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">В работе</h5>
+                <p class="card-text display-4">{{ stats.in_progress }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Решено</h5>
+                <p class="card-text display-4">{{ stats.resolved }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Все тикеты</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Заголовок</th>
+                        <th>Пользователь</th>
+                        <th>Компьютер</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in all_tickets %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.title }}</td>
+                        <td>{{ ticket.user.first_name }} {{ ticket.user.last_name }}</td>
+                        <td>{{ ticket.computer.pc_name }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if ticket.status == 'open' %}bg-warning
+                                {% elif ticket.status == 'in_progress' %}bg-info
+                                {% elif ticket.status == 'resolved' %}bg-success
+                                {% else %}bg-secondary{% endif %}">
+                                {% if ticket.status == 'open' %}Открыт
+                                {% elif ticket.status == 'in_progress' %}В работе
+                                {% elif ticket.status == 'resolved' %}Решен
+                                {% else %}Отменен{% endif %}
+                            </span>
+                        </td>
+                        <td>{{ ticket.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                        <td>
+                            <a href="{{ url_for('ticket_detail', ticket_id=ticket.id) }}" class="btn btn-sm btn-primary">Просмотр</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
